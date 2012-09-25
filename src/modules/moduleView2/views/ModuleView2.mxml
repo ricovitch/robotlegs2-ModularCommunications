@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Module xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		  xmlns:s="library://ns.adobe.com/flex/spark" 
+		  xmlns:mx="library://ns.adobe.com/flex/mx"
+		  preinitialize="preinitializeHandler(event)"
+		  width="100%" height="100%">
+	
+	<s:layout>
+		<s:VerticalLayout/>
+	</s:layout>
+	<fx:Script>
+		<![CDATA[
+			import modules.moduleView2.config.ModuleView2Config;
+			
+			import mx.events.FlexEvent;
+			
+			protected var config:ModuleView2Config;
+			
+			protected function preinitializeHandler(event:FlexEvent):void
+			{
+				config = new ModuleView2Config( this );
+			}
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<s:ArrayList id="channelList">
+			<fx:String>global</fx:String>
+			<fx:String>moduleOnly</fx:String>
+			<fx:String>toModule1</fx:String>
+			<fx:String>toModule2</fx:String>
+		</s:ArrayList>
+		
+		<s:ArrayList id="messageList"/>
+	</fx:Declarations>
+	
+	<s:BorderContainer width="100%" height="100%" borderWeight="2" borderColor="#FF0000">
+		<s:layout>
+			<s:VerticalLayout verticalAlign="middle" horizontalAlign="center"/>
+		</s:layout>
+		
+		<s:Label text="Module View 2"/>
+		<s:DropDownList id="sendChannel" dataProvider="{channelList}" selectedItem="global"/>
+		<s:Button id="sendMessage" label="Send Message"/>
+		<s:List id="msgList" width="250" height="250" dataProvider="{messageList}"/>
+	</s:BorderContainer>
+	
+</s:Module>
