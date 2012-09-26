@@ -2,8 +2,8 @@ package modules.moduleView2.views
 {
 	import actions.TextMessageEvent;
 	
-	import flash.events.IEventDispatcher;
-	import flash.events.MouseEvent;
+	import flash.events.EventDispatcher;
+	import flash.utils.Dictionary;
 	
 	import robotlegs.bender.bundles.mvcs.Mediator;
 	import robotlegs.bender.framework.api.ILogger;
@@ -16,48 +16,23 @@ package modules.moduleView2.views
 		[Inject]
 		public var logger:ILogger;
 		
-		[Inject(name="global")]
-		public var globalDispatcher:IEventDispatcher;
-		
-		[Inject(name="moduleOnly")]
-		public var moduleOnlyDispatcher:IEventDispatcher;
-		
-		[Inject(name="toModule1")]
-		public var toModule1Dispatcher:IEventDispatcher;
-		
-		[Inject(name="toModule2")]
-		public var toModule2Dispatcher:IEventDispatcher;
+		[Inject(name="CommunicationChannels")]
+		public var dispatchChannel:Dictionary;
 		
 		override public function initialize():void
 		{
 			logger.info( "Module View 2 Initialized" );
-			eventMap.mapListener( view.sendMessage, MouseEvent.CLICK, sendMessageHandler, MouseEvent );
 			
-			globalDispatcher.addEventListener( TextMessageEvent.TEXT_MESSAGE, messageReceived );
-			moduleOnlyDispatcher.addEventListener( TextMessageEvent.TEXT_MESSAGE, messageReceived );
-			toModule2Dispatcher.addEventListener( TextMessageEvent.TEXT_MESSAGE, messageReceived );
+			addViewListener( TextMessageEvent.TEXT_MESSAGE, sendMessageHandler, TextMessageEvent );
+			
+			EventDispatcher( dispatchChannel[ "global" ] ).addEventListener( TextMessageEvent.TEXT_MESSAGE, messageReceived );
+			EventDispatcher( dispatchChannel[ "moduleOnly" ] ).addEventListener( TextMessageEvent.TEXT_MESSAGE, messageReceived );
+			EventDispatcher( dispatchChannel[ "toModule2" ] ).addEventListener( TextMessageEvent.TEXT_MESSAGE, messageReceived );
 		}
 		
-		private function sendMessageHandler( event:MouseEvent ):void
+		private function sendMessageHandler( event:TextMessageEvent ):void
 		{
-			switch( view.sendChannel.selectedItem )
-			{
-				case "global":
-					globalDispatcher.dispatchEvent( new TextMessageEvent( TextMessageEvent.TEXT_MESSAGE, "Module View 2: Hello!!" ) );
-					break;
-				
-				case "moduleOnly":
-					moduleOnlyDispatcher.dispatchEvent( new TextMessageEvent( TextMessageEvent.TEXT_MESSAGE, "Module View 2: Hello!!" ) );
-					break;
-				
-				case "toModule1":
-					toModule1Dispatcher.dispatchEvent( new TextMessageEvent( TextMessageEvent.TEXT_MESSAGE, "Module View 2: Hello!!" ) );
-					break;
-				
-				case "toModule2":
-					toModule2Dispatcher.dispatchEvent( new TextMessageEvent( TextMessageEvent.TEXT_MESSAGE, "Module View 2: Hello!!" ) );
-					break;
-			}
+			EventDispatcher( dispatchChannel[ event.channel ] ).dispatchEvent( event );
 		}
 		
 		private function messageReceived( event:TextMessageEvent ):void

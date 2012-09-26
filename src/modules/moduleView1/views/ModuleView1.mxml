@@ -10,6 +10,8 @@
 	</s:layout>
 	<fx:Script>
 		<![CDATA[
+			import actions.TextMessageEvent;
+			
 			import modules.moduleView1.config.ModuleView1Config;
 			
 			import mx.events.FlexEvent;
@@ -20,6 +22,12 @@
 			{
 				config = new ModuleView1Config( this );
 			}
+			
+			protected function sendMessage_clickHandler(event:MouseEvent):void
+			{
+				dispatchEvent( new TextMessageEvent( TextMessageEvent.TEXT_MESSAGE, "Module View 1: Hello!", sendChannel.selectedItem ) );
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -42,7 +50,7 @@
 		
 		<s:Label text="Module View 1"/>
 		<s:DropDownList id="sendChannel" dataProvider="{channelList}" selectedItem="global"/>
-		<s:Button id="sendMessage" label="Send Message"/>
+		<s:Button id="sendMessage" label="Send Message" click="sendMessage_clickHandler(event)"/>
 		<s:List id="msgList" width="250" height="250" dataProvider="{messageList}"/>
 	</s:BorderContainer>
 	

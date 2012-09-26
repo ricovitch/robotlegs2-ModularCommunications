@@ -7,6 +7,18 @@
 		<s:VerticalLayout/>
 	</s:layout>
 	
+	<fx:Script>
+		<![CDATA[
+			import actions.TextMessageEvent;
+			
+			protected function sendMessage_clickHandler(event:MouseEvent):void
+			{
+				dispatchEvent( new TextMessageEvent( TextMessageEvent.TEXT_MESSAGE, "Local View 1: Hello!", sendChannel.selectedItem ) );
+			}
+		]]>
+	</fx:Script>
+	
+	
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 		<s:ArrayList id="channelList">
@@ -26,7 +38,7 @@
 		
 		<s:Label text="Local View 1"/>
 		<s:DropDownList id="sendChannel" dataProvider="{channelList}" selectedItem="global"/>
-		<s:Button id="sendMessage" label="Send Message"/>
+		<s:Button id="sendMessage" label="Send Message" click="sendMessage_clickHandler(event)"/>
 		<s:List id="msgList" width="250" height="250" dataProvider="{messageList}"/>
 	</s:BorderContainer>
 	

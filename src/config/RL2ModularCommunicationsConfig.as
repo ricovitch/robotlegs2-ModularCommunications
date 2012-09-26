@@ -2,6 +2,7 @@ package config
 {
 	import flash.display.DisplayObjectContainer;
 	import flash.events.IEventDispatcher;
+	import flash.utils.Dictionary;
 	
 	import org.swiftsuspenders.Injector;
 	
@@ -23,7 +24,6 @@ package config
 		public var injector:Injector;
 		
 		private var _mediatorMap:IMediatorMap;
-		private var _eventDispatcher:IEventDispatcher;
 		
 		private var _contextView:DisplayObjectContainer;
 		
@@ -41,18 +41,29 @@ package config
 				.configure( _contextView );
 			
 			context.logLevel = LogLevel.DEBUG;
+			context.lifecycle.afterInitializing( afterInitializing );
 			
 			injector = context.injector;
-			_eventDispatcher = injector.getInstance( IEventDispatcher );
 			_mediatorMap = injector.getInstance( IMediatorMap );
 			
-			mapMappingCommands();
+			configureMediators();
 		}
 		
-		private function mapMappingCommands():void
+		private function configureMediators():void
 		{
 			_mediatorMap.map( LocalView1 ).toMediator( LocalView1Mediator );
 			_mediatorMap.map( LocalView2 ).toMediator( LocalView2Mediator );
+		}
+		
+		private function afterInitializing():void
+		{
+			var communicationChannels:Dictionary = new Dictionary();
+				communicationChannels[ "global" ] = injector.getInstance( IEventDispatcher, "global" );
+				communicationChannels[ "moduleOnly" ] = injector.getInstance( IEventDispatcher, "moduleOnly" );
+				communicationChannels[ "toModule1" ] = injector.getInstance( IEventDispatcher, "toModule1" );
+				communicationChannels[ "toModule2" ] = injector.getInstance( IEventDispatcher, "toModule2" );
+			
+			injector.map( Dictionary, "CommunicationChannels" ).toValue( communicationChannels );
 		}
 	}
 }
