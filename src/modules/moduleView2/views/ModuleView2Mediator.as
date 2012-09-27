@@ -2,7 +2,6 @@ package modules.moduleView2.views
 {
 	import actions.TextMessageEvent;
 	
-	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
 	
 	import robotlegs.bender.bundles.mvcs.Mediator;
@@ -25,14 +24,14 @@ package modules.moduleView2.views
 			
 			addViewListener( TextMessageEvent.TEXT_MESSAGE, sendMessageHandler, TextMessageEvent );
 			
-			EventDispatcher( dispatchChannel[ "global" ] ).addEventListener( TextMessageEvent.TEXT_MESSAGE, messageReceived );
-			EventDispatcher( dispatchChannel[ "moduleOnly" ] ).addEventListener( TextMessageEvent.TEXT_MESSAGE, messageReceived );
-			EventDispatcher( dispatchChannel[ "toModule2" ] ).addEventListener( TextMessageEvent.TEXT_MESSAGE, messageReceived );
+			eventMap.mapListener( dispatchChannel[ "global" ], TextMessageEvent.TEXT_MESSAGE, messageReceived, TextMessageEvent );
+			eventMap.mapListener( dispatchChannel[ "moduleOnly" ], TextMessageEvent.TEXT_MESSAGE, messageReceived, TextMessageEvent );
+			eventMap.mapListener( dispatchChannel[ "toModule2" ], TextMessageEvent.TEXT_MESSAGE, messageReceived, TextMessageEvent );
 		}
 		
 		private function sendMessageHandler( event:TextMessageEvent ):void
 		{
-			EventDispatcher( dispatchChannel[ event.channel ] ).dispatchEvent( event );
+			dispatchChannel[ event.channel ].dispatchEvent( event );
 		}
 		
 		private function messageReceived( event:TextMessageEvent ):void
