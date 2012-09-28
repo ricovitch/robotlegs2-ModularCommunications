@@ -16,3 +16,7 @@ This Flex 4.6 Project is created for testing the creation and communication of m
 	+ In the source field, add "src\modules\moduleView1\views\ModuleView2.as"
 	+ Click **Ok**
 + Compile the project and run
+
+### Tags
+
+Robotlegs 2, RL2, Module, Modules, Modular, Communication
