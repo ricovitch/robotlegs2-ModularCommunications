@@ -2,14 +2,15 @@ package modules.moduleView2.config
 {
 	import flash.display.DisplayObjectContainer;
 	
+	import mx.events.FlexEvent;
+	
 	import modules.moduleView2.views.ModuleView2;
 	import modules.moduleView2.views.ModuleView2Mediator;
-	
-	import mx.events.FlexEvent;
 	
 	import org.swiftsuspenders.Injector;
 	
 	import robotlegs.bender.bundles.mvcs.MVCSBundle;
+	import robotlegs.bender.extensions.contextView.ContextView;
 	import robotlegs.bender.extensions.mediatorMap.api.IMediatorMap;
 	import robotlegs.bender.framework.api.IContext;
 	import robotlegs.bender.framework.api.LogLevel;
@@ -32,8 +33,8 @@ package modules.moduleView2.config
 		public function startConfiguring():void
 		{
 			context = new Context()
-				.extend( MVCSBundle )
-				.configure( _contextView );
+				.install( MVCSBundle )
+				.configure( new ContextView(_contextView) );
 			
 			context.logLevel = LogLevel.DEBUG;
 			

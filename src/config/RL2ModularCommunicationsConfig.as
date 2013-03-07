@@ -7,6 +7,7 @@ package config
 	import org.swiftsuspenders.Injector;
 	
 	import robotlegs.bender.bundles.mvcs.MVCSBundle;
+	import robotlegs.bender.extensions.contextView.ContextView;
 	import robotlegs.bender.extensions.mediatorMap.api.IMediatorMap;
 	import robotlegs.bender.extensions.scopedEventDispatcher.ScopedEventDispatcherExtension;
 	import robotlegs.bender.framework.api.IContext;
@@ -36,12 +37,12 @@ package config
 		private function startConfiguration():void
 		{
 			context = new Context()
-				.extend( MVCSBundle )
-				.extend( new ScopedEventDispatcherExtension( "global", "moduleOnly", "toModule1", "toModule2" ) )
-				.configure( _contextView );
+				.install( MVCSBundle )
+				.install( new ScopedEventDispatcherExtension( "global", "moduleOnly", "toModule1", "toModule2" ) )
+				.configure( new ContextView(_contextView) );
 			
 			context.logLevel = LogLevel.DEBUG;
-			context.lifecycle.afterInitializing( afterInitializing );
+			context.afterInitializing( afterInitializing );
 			
 			injector = context.injector;
 			_mediatorMap = injector.getInstance( IMediatorMap );
